@@ -209,6 +209,11 @@ class Parser
      */
     protected function parse()
     {
+        if (!$this->resource) {
+            throw new Exception(
+                'MIME message cannot be parsed'
+            );
+        }
         $structure = mailparse_msg_get_structure($this->resource);
         $this->parts = [];
         foreach ($structure as $part_id) {
@@ -405,7 +410,7 @@ class Parser
             $body = empty($inline_parts) ? '' : $inline_parts[0];
         } else {
             throw new Exception(
-                'Invalid type specified for getMessageBody(). Expected: text, html or htmlEmbeded.'
+                'Invalid type specified for getMessageBody(). Expected: text, html or htmlEmbedded.'
             );
         }
 
@@ -465,9 +470,9 @@ class Parser
     }
 
     /**
-     * Returns the attachments contents in order of appearance
+     * Returns the inline parts contents (text or HTML)
      *
-     * @return Attachment[]
+     * @return string[] The decoded inline parts.
      */
     public function getInlineParts($type = 'text')
     {

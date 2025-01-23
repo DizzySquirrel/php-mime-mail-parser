@@ -82,7 +82,7 @@ namespace PhpMimeMailParser {
         {
             $this->expectException(Exception::class);
             $this->expectExceptionMessage(
-                'Invalid type specified for getMessageBody(). Expected: text, html or htmlEmbeded.'
+                'Invalid type specified for getMessageBody(). Expected: text, html or htmlEmbedded.'
             );
 
             $Parser = new Parser();
@@ -228,6 +228,16 @@ namespace PhpMimeMailParser {
             $Parser->setText(file_get_contents($file));
 
             $Parser->saveAttachments('dir', false, 'InvalidValue');
+        }
+
+        public function testMIMEMessageCannotBeParsed()
+        {
+            $this->expectWarning();
+
+            $file = __DIR__ . '/mails/issue408.eml';
+
+            $Parser = new Parser();
+            $Parser->setPath($file);
         }
     }
 }
